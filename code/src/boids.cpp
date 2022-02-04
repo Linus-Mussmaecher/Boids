@@ -4,7 +4,7 @@ int main() {
     //init
     InitWindow(1200, 900, "Boids");
     SetTargetFPS(64);
-    int amount = 100;
+    int amount = 110;
 
     vector <Boid> boids{};
     boids.reserve(amount);
