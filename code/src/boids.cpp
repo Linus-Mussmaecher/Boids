@@ -14,15 +14,10 @@ int main() {
                         float(GetRandomValue(0, GetScreenWidth())),
                         float(GetRandomValue(0, GetScreenHeight()))
                 },
-                {
-                    speed,//* cos(float(i)/float(amount) * 2.f * PI),
-                    speed * 0//* sin(float(i)/float(amount) * 2.f * PI)
-                 }
+                Vector2Rotate({0,speed}, 2 * PI * float(GetRandomValue(0, 100)) / 100)
         ));
     }
 //    boids[0].choose();
-//    boids.push_back(Boid({100, 200}, {speed, 0.f}));
-//    boids.push_back(Boid({800, 200}, {-speed, 0.f}));
 
     while (!WindowShouldClose()) {
 
