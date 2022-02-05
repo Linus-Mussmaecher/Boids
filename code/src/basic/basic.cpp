@@ -1,11 +1,10 @@
-#include "../include/boids.h"
+//
+// Created by Linus on 05/02/2022.
+//
+#include "basic.h"
 
-int main() {
-    //init
-    InitWindow(1200, 900, "Boids");
-    SetTargetFPS(64);
-    int amount = 110;
 
+void runBasic(int amount){
     vector<Boid> boids{};
     boids.reserve(amount);
     for (int i = 0; i < amount; i++) {
@@ -17,7 +16,9 @@ int main() {
                 Vector2Rotate({0, speed}, 2 * PI * float(GetRandomValue(0, 100)) / 100)
         ));
     }
+#ifdef _DEBUG
     boids[0].choose();
+#endif
 
 
     vector<Obstacle> obstacles{
@@ -50,7 +51,4 @@ int main() {
 
     }
 
-
-    CloseWindow();
-    return 0;
 }

@@ -2,7 +2,7 @@
 // Created by Linus on 03.02.2022.
 //
 
-#include "../include/boids.h"
+#include "basic.h"
 
 Boid::Boid(Vector2 pos, Vector2 dir, bool chosen_boid) :
         pos(pos), dir(dir), color({

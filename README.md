@@ -1,2 +1,2 @@
 # Boids
-A small project C++ project containing a 2D-Boid simulation
+A small C++ project containing a 2D-Boid simulation

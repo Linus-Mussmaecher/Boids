@@ -3,7 +3,7 @@
 //
 
 #include <array>
-#include "../include/ray_extend.h"
+#include "ray_extend.h"
 
 
 float Vector2AngleUnsigned(Vector2 a, Vector2 b) {

@@ -2,13 +2,13 @@
 // Created by Linus on 03.02.2022.
 //
 
-#ifndef BOIDS_BOIDS_H
-#define BOIDS_BOIDS_H
+#ifndef BOIDS_BASIC_H
+#define BOIDS_BASIC_H
 
 #include "raylib.h"
 #include "raymath.h"
 
-#include "ray_extend.h"
+#include "../ray_extend/ray_extend.h"
 
 #include <array>
 #include <vector>
@@ -20,6 +20,7 @@
 using std::array;
 using std::vector;
 
+void runBasic(int amount);
 
 class Obstacle {
 public:
@@ -58,4 +59,4 @@ private:
 
 
 
-#endif //BOIDS_BOIDS_H
+#endif //BOIDS_BASIC_H
