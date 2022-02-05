@@ -13,11 +13,26 @@
 #include <array>
 #include <vector>
 
+#include <cmath>
 #include <iostream>
 #include <algorithm>
 
 using std::array;
 using std::vector;
+
+
+class Obstacle {
+public:
+    explicit Obstacle(Rectangle collider, Color c = DARKGRAY);
+    void draw();
+
+    [[nodiscard]] const Rectangle &getCollider() const;
+
+private:
+    Rectangle collider;
+    Color color;
+};
+
 
 const int vision_range = 100;
 const int vision_angle = 230;
@@ -28,7 +43,7 @@ const float BOID_SIZE = 8;
 class Boid {
 public:
     Boid(Vector2 pos, Vector2 dir, bool chosen_boid = false);
-    void move(vector<Boid> *boids);
+    void move(vector<Boid> *boids, vector<Obstacle> *obstacles);
     void draw() const;
     void choose();
 private:
@@ -36,8 +51,9 @@ private:
     Vector2 pos;
     Vector2 dir;
     bool chosen_boid;
-};
 
+    static bool checkRayCollision(Vector2 ray_start, Vector2 ray_end, Rectangle boundaries, vector<Obstacle> *obstacles);
+};
 
 
 

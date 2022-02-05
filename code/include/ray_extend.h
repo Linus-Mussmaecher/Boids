@@ -28,7 +28,12 @@ Vector2 Vector2ScaleDown(Vector2 v, float length);
 //returns the perpendicular projection of vector a onto base vector b
 Vector2 Vector2ProjectOnto(Vector2 a, Vector2 b);
 
-bool IsInRectangle(Vector2 v, Rectangle rect);
+//checks if the line between the two vectors collides with the rectangle
+//returns the collision point by reference. If the line starts inside the rectangle, the collision point is the starting point
+bool CheckCollisionLineRect(Vector2 line_start, Vector2 line_end, Rectangle rect, Vector2* collision_point);
+
+//checks if the line between the two vectors collides with the rectangle
+bool CheckCollisionLineRect(Vector2 line_start, Vector2 line_end, Rectangle rect);
 
 Vector2 operator+(Vector2 a, Vector2 b);
 Vector2 operator-(Vector2 a, Vector2 b);

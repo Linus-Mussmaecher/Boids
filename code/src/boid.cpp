@@ -2,8 +2,6 @@
 // Created by Linus on 03.02.2022.
 //
 
-#include <cmath>
-
 #include "../include/boids.h"
 
 Boid::Boid(Vector2 pos, Vector2 dir, bool chosen_boid) :
@@ -16,7 +14,7 @@ Boid::Boid(Vector2 pos, Vector2 dir, bool chosen_boid) :
         chosen_boid(chosen_boid) {
 }
 
-void Boid::move(vector<Boid> *boids) {
+void Boid::move(vector<Boid> *boids, vector<Obstacle> *obstacles) {
     //shortened screen restraints
     auto w = float(GetScreenWidth());
     auto h = float(GetScreenHeight());
@@ -64,19 +62,22 @@ void Boid::move(vector<Boid> *boids) {
     Vector2 avoid_force = Vector2Zero();
     //calculate future position
     Vector2 ray = Vector2ScaleTo(dir, vision_range);
-    Vector2 project_pos = pos + ray;
     //check if future position leaves borders
-    if (!IsInRectangle(project_pos, {0, 0, w, h})) {
+    if (checkRayCollision(pos, pos + ray, {0,0,w,h}, obstacles)) {
+        avoid_force = Vector2ScaleTo(dir, steer_force); // set a default value. If the boid is stuck inside an obstacle, it will thus push out
         //find a directin without collision
         for (int i = 0; i < 100; i++) {
+            //randomly decide wether to check the left or right option first
             bool left_first = GetRandomValue(0, 1) == 0;
+            //generate two ray pointing to the left and right
             Vector2 ray1 = Vector2Rotate(ray, float(left_first ? i : -i) * 2.f * PI / 100);
             Vector2 ray2 = Vector2Rotate(ray, float(left_first ? -i : i) * 2.f * PI / 100);
-            if (IsInRectangle(pos + ray1, {0, 0, w, h})) {
+
+            if (!checkRayCollision(pos, pos + ray1, {0,0,w,h}, obstacles)) {
                 avoid_force = ray1;
                 break;
             }
-            if (IsInRectangle(pos + ray2, {0, 0, w, h})) {
+            if (!checkRayCollision(pos, pos + ray2, {0,0,w,h}, obstacles)) {
                 avoid_force = ray2;
                 break;
             }
@@ -90,7 +91,7 @@ void Boid::move(vector<Boid> *boids) {
         //if rules are pushing into the environment, avoid that part of the force
         Vector2 projection = Vector2ProjectOnto(rule_force, avoid_force);
         //if the dot product is negative (the vectors are pointing in opposite direction, remove that part of the rule_force
-        if(projection * avoid_force < 0){
+        if (projection * avoid_force < 0) {
             rule_force = rule_force - projection;
         }
     } else {
@@ -102,7 +103,13 @@ void Boid::move(vector<Boid> *boids) {
     dir = Vector2ScaleDown(dir + avoid_force + rule_force, speed);
 
     //movement
-    pos = pos + dir;
+    Vector2 next_pos = pos + dir;
+    for(Obstacle &o : *obstacles){
+        if(CheckCollisionLineRect(pos, pos+dir, o.getCollider(), &next_pos)){
+            next_pos = next_pos - Vector2ScaleTo(dir, 1);
+        } //if we would collide with this one, just move until collision point and a bit back
+    }
+    pos = next_pos;
 
     //wrapping
 
@@ -112,6 +119,14 @@ void Boid::move(vector<Boid> *boids) {
 //    if (pos.y > h) pos.y -= h;
 
 
+}
+
+
+bool Boid::checkRayCollision(Vector2 ray_start, Vector2 ray_end, Rectangle boundaries, vector<Obstacle> *obstacles) {
+    return !CheckCollisionPointRec(ray_end, boundaries) ||  //ray_end is outside of boundaries
+           std::any_of(obstacles->begin(), obstacles->end(), [ray_start, ray_end](Obstacle &o) {
+               return CheckCollisionLineRect(ray_start, ray_end, o.getCollider()); //ray collides with an obstacle
+           });
 }
 
 void Boid::draw() const {
