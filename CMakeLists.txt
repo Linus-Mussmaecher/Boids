@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 20)
 find_package(raylib REQUIRED)
 include_directories(${RAYLIB_INCLUDE_DIRS})
 
-add_executable(boids code/src/main.cpp code/src/basic/basic.h code/src/basic/boid.cpp code/src/ray_extend/ray_extend.h code/src/ray_extend/ray_extend.cpp code/src/basic/obstacle.cpp code/src/basic/basic.cpp)
+add_executable(boids code/src/main.cpp code/src/basic/basic.h code/src/basic/boid.cpp code/src/ray_extend/ray_extend.h code/src/ray_extend/ray_extend.cpp code/src/basic/obstacle.cpp code/src/basic/basic.cpp code/src/teams/teams.h code/src/teams/teamboid.cpp code/src/teams/teams.cpp)
 
 target_link_libraries(boids ${RAYLIB_LIBRARIES})
 

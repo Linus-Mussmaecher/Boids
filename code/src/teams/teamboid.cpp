@@ -1,27 +1,32 @@
 //
-// Created by Linus on 03.02.2022.
+// Created by Linus on 05/02/2022.
 //
 
-#include "basic.h"
+#include "teams.h"
 
-Boid::Boid(Vector2 pos, Vector2 dir) :
-        pos(pos), dir(dir), color({
-                                          static_cast<unsigned char>(GetRandomValue(0, 255)),
-                                          static_cast<unsigned char>(GetRandomValue(0, 255)),
-                                          static_cast<unsigned char>(GetRandomValue(0, 255)),
-                                          255
-                                  }),
-        chosen_boid(false) {
+TeamBoid::TeamBoid(const Vector2 &pos, const Vector2 &dir, Color color, uint8_t team) :
+pos(pos),
+dir(dir),
+color(color),
+team(team),
+health(5),
+chosen_boid(false)
+{
+    this->color = color;
 }
 
-void Boid::move(vector<Boid> *boids, vector<Obstacle> *obstacles) {
+uint8_t TeamBoid::getTeam() const {
+    return team;
+}
+
+void TeamBoid::move(vector<TeamBoid> *allies, vector<TeamBoid> *enemies, vector<Obstacle> *obstacles) {
     //loop over all boids
     Vector2 mate_pos_sum = Vector2Zero();
     Vector2 mate_dir_sum = Vector2Zero();
     Vector2 mate_avoid_force = Vector2Zero();
     int mate_count = 0;
 
-    for (Boid b: *boids) {
+    for (TeamBoid b: *allies) {
         //for those visible, add their values to the average calculations
         if (Vector2Distance(b.pos, pos) < vision_range &&
             abs(Vector2AngleSigned(dir, b.pos - pos)) < float(vision_angle) / 2) {
@@ -35,20 +40,46 @@ void Boid::move(vector<Boid> *boids, vector<Obstacle> *obstacles) {
         }
     }
 
+
+
+    Vector2 enem_avoid_force = Vector2Zero();
+    //react to enemies
+    int enem_count = 0;
+    for(TeamBoid &enemy : *enemies){
+        if (Vector2Distance(enemy.pos, pos) < vision_range &&
+            abs(Vector2AngleSigned(dir, enemy.pos - pos)) < float(vision_angle) / 2) {
+            enem_count ++;
+        }
+    }
+        for(TeamBoid &enemy : *enemies){
+        //avoid visible enemies
+        if (Vector2Distance(enemy.pos, pos) < vision_range &&
+            abs(Vector2AngleSigned(dir, enemy.pos - pos)) < float(vision_angle) / 2 && health > 0) {
+            enem_avoid_force = enem_avoid_force +
+                               (pos - enemy.pos) / Vector2Distance(pos, enemy.pos) *
+                               steer_force * (1 - float(mate_count) / float(enem_count + 1) * float(health) / float(enemy.getHealth() + 1));
+        }
+        if (Vector2Distance(enemy.pos, pos) < BOID_SIZE && health > 0){
+            health--;
+        }
+    }
+
     Vector2 rule_force = Vector2Zero();
+    rule_force = rule_force + enem_avoid_force * 0.7;
 
     if (mate_count != 0) {
         Vector2 mate_pos_avg = mate_pos_sum / float(mate_count);
         Vector2 mate_dir_avg = mate_dir_sum / float(mate_count);
 
         //separation
-        Vector2 separation_force = mate_avoid_force * 0.3;
+        Vector2 separation_force = mate_avoid_force * 0.5;
         //alignment
         Vector2 alignment_force = Vector2ScaleTo(mate_dir_avg, steer_force * 0.5f);
         //cohesion
         Vector2 cohesion_force = Vector2ScaleTo(mate_pos_avg - pos, steer_force * 0.9f);
 
         rule_force =
+                rule_force+
                 separation_force +
                 alignment_force +
                 cohesion_force;
@@ -106,10 +137,9 @@ void Boid::move(vector<Boid> *boids, vector<Obstacle> *obstacles) {
         } //if we would collide with this one, just move until collision point and a bit back
     }
     pos = next_pos;
-
 }
 
-void Boid::draw() const {
+void TeamBoid::draw() const {
     DrawCircle(int(pos.x), int(pos.y), BOID_SIZE / 2, color);
     if (chosen_boid) {
         DrawCircle(int(pos.x), int(pos.y), vision_range, {255, 255, 255, 100});
@@ -119,7 +149,10 @@ void Boid::draw() const {
     }
 }
 
-void Boid::choose() {
+void TeamBoid::choose() {
     chosen_boid = true;
 }
 
+uint8_t TeamBoid::getHealth() const {
+    return health;
+}

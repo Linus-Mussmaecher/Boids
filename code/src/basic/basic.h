@@ -43,18 +43,18 @@ const float BOID_SIZE = 8;
 
 class Boid {
 public:
-    Boid(Vector2 pos, Vector2 dir, bool chosen_boid = false);
+    Boid(Vector2 pos, Vector2 dir);
     void move(vector<Boid> *boids, vector<Obstacle> *obstacles);
     void draw() const;
     void choose();
-private:
+protected:
     Color color;
     Vector2 pos;
     Vector2 dir;
     bool chosen_boid;
-
-    static bool checkRayCollision(Vector2 ray_start, Vector2 ray_end, Rectangle boundaries, vector<Obstacle> *obstacles);
 };
+
+bool checkRayCollision(Vector2 ray_start, Vector2 ray_end, vector<Obstacle> *obstacles);
 
 
 
