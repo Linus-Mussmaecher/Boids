@@ -41,8 +41,28 @@ Vector2 operator/(Vector2 v, float f);
 Vector2 operator*(Vector2 v, float f);
 Vector2 operator*(float f, Vector2 v);
 bool operator==(Vector2 a, Vector2 b);
-
 float operator*(Vector2 a, Vector2 b);
+
+
+//returns a vector with length length pointing into direction v
+Vector3  Vector3ScaleTo(Vector3 v, float length);
+
+//scales the vector to the desired size iff it is currently shorter
+Vector3 Vector3ScaleUp(Vector3 v, float length);
+
+//scales the vector to the desired size iff it is currently longer
+Vector3 Vector3ScaleDown(Vector3 v, float length);
+
+//returns the perpendicular projection of vector a onto base vector b
+Vector3 Vector3ProjectOnto(Vector3 a, Vector3 b);
+
+Vector3 operator+(Vector3 a, Vector3 b);
+Vector3 operator-(Vector3 a, Vector3 b);
+Vector3 operator/(Vector3 v, float f);
+Vector3 operator*(Vector3 v, float f);
+Vector3 operator*(float f, Vector3 v);
+bool operator==(Vector3 a, Vector3 b);
+float operator*(Vector3 a, Vector3 b);
 
 
 #endif //BOIDS_RAY_EXTEND_H

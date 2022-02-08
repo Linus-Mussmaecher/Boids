@@ -98,3 +98,49 @@ bool operator==(Vector2 a, Vector2 b) {
 float operator*(Vector2 a, Vector2 b) {
     return Vector2DotProduct(a, b);
 }
+
+
+//returns a vector with length length pointing into direction v
+Vector3  Vector3ScaleTo(Vector3 v, float length){
+    float l = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+    return l == 0 ? v : length / l * v;
+}
+
+//scales the vector to the desired size iff it is currently shorter
+Vector3 Vector3ScaleUp(Vector3 v, float length){
+    return Vector3Length(v) >= length ? v : Vector3ScaleTo(v, length);
+}
+
+//scales the vector to the desired size iff it is currently longer
+Vector3 Vector3ScaleDown(Vector3 v, float length){
+    return Vector3Length(v) <= length ? v : Vector3ScaleTo(v, length);
+}
+
+//returns the perpendicular projection of vector a onto base vector b
+Vector3 Vector3ProjectOnto(Vector3 a, Vector3 b) {
+    return b * (b * a) / (a * a);
+}
+Vector3 operator+(Vector3 a, Vector3 b){
+    return {a.x + b.x, a.y + b.y, a.z + b.z};
+}
+
+Vector3 operator-(Vector3 a, Vector3 b){
+    return {a.x - b.x, a.y - b.y, a.z - b.z};
+}
+
+Vector3 operator/(Vector3 v, float f){
+    return {v.x / f, v.y / f, v.z / f};
+}
+
+Vector3 operator*(Vector3 v, float f){
+    return {v.x * f, v.y * f, v.z * f};
+}
+Vector3 operator*(float f, Vector3 v){
+    return {f * v.x, f * v.y, f * v.z};
+}
+bool operator==(Vector3 a, Vector3 b){
+    return a.x == b.x && a.y == b.y && a.z == b.z;
+}
+float operator*(Vector3 a, Vector3 b){
+    return a.x * b.x + a.y * b.y + a.z * b.z;
+}

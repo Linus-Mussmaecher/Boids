@@ -2,8 +2,8 @@
 // Created by Linus on 03.02.2022.
 //
 
-#ifndef BOIDS_BASIC_H
-#define BOIDS_BASIC_H
+#ifndef BOIDS_BOIDS_H
+#define BOIDS_BOIDS_H
 
 #include "raylib.h"
 #include "raymath.h"
@@ -59,4 +59,4 @@ bool checkRayCollision(Vector2 ray_start, Vector2 ray_end, vector<Obstacle> *obs
 
 
 
-#endif //BOIDS_BASIC_H
+#endif //BOIDS_BOIDS_H

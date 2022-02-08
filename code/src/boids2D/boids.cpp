@@ -1,7 +1,7 @@
 //
 // Created by Linus on 05/02/2022.
 //
-#include "basic.h"
+#include "boids.h"
 
 
 void runBasic(int amount){
@@ -28,6 +28,7 @@ void runBasic(int amount){
             Obstacle({750, 700, 50, 200}),
             Obstacle({350, 500, 600, 30}),
             Obstacle({450, 100, 400, 30}),
+            Obstacle({1000, 50, 50, 700}),
 
             //edges
 

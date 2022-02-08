@@ -2,7 +2,7 @@
 // Created by Linus on 05.02.2022.
 //
 
-#include "basic.h"
+#include "boids.h"
 
 
 
