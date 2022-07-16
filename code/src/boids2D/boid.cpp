@@ -108,19 +108,50 @@ void Boid::move(vector<Boid> *boids, vector<Obstacle> *obstacles) {
     pos = next_pos;
 
 }
-
-const Color c1 = GREEN;//{166,200,255,255};
-const Color c2 = BLUE;//{0,98,255,255};
+const std::vector<Color> color_list = {
+        PURPLE,
+        RED,
+        ORANGE,
+        YELLOW,
+        GREEN,
+        BLUE,
+};
 
 void Boid::draw() const {
 
-    float f = (1 + Vector2DotProduct({1,0}, Vector2Normalize(dir)))/2.f;
-    DrawCircle(int(pos.x), int(pos.y), BOID_SIZE / 2, {
-        static_cast<unsigned char>(float(c1.r) + f * float(c2.r - c1.r)),
-        static_cast<unsigned char>(float(c1.g) + f * float(c2.g - c1.g)),
-        static_cast<unsigned char>(float(c1.b) + f * float(c2.b - c1.b)),
-        255
-    });
+    //calculate angle of direction vector in [0, 2PI[
+    float angle = atan2(dir.y, dir.x);
+    if(angle < 0) angle += 2 * PI;
+
+    //calculate what part of the circle is reserved for each color
+    float angle_step = 2.f * PI / float(color_list.size());
+    //calculate the index of one of the two colors to be blended
+    int c1_index = int(floor(angle/angle_step));
+
+    //calclate blending colors
+    Color c1 = color_list[(c1_index + 0)%color_list.size()];
+    Color c2 = color_list[(c1_index + 1)%color_list.size()];
+    //caculate how far the angle is in the current sector of the circle -> determines how much of each color is to be used
+    float sp = (angle - float(c1_index) * angle_step)/angle_step;
+
+    Color color = {
+            static_cast<unsigned char>(float(c1.r) + sp * float(c2.r - c1.r)),
+            static_cast<unsigned char>(float(c1.g) + sp * float(c2.g - c1.g)),
+            static_cast<unsigned char>(float(c1.b) + sp * float(c2.b - c1.b)),
+            static_cast<unsigned char>(float(c1.a) + sp * float(c2.a - c1.a))
+    };
+
+    //draw the circle by blending the colors
+    DrawCircle(int(pos.x), int(pos.y), BOID_SIZE / 2, color );
+
+    DrawTriangle(pos - Vector2ScaleTo(dir, BOID_SIZE/3),
+                 pos - Vector2ScaleTo(dir + Vector2{-dir.y, dir.x}, BOID_SIZE)- Vector2ScaleTo(dir, BOID_SIZE/3),
+                 pos - Vector2ScaleTo(dir + Vector2{dir.y, -dir.x}, BOID_SIZE)- Vector2ScaleTo(dir, BOID_SIZE/3),
+                 color
+                 );
+
+
+
     if (chosen_boid) {
         DrawCircle(int(pos.x), int(pos.y), vision_range, {255, 255, 255, 100});
         Vector2 ray = Vector2ScaleTo(dir, vision_range);
