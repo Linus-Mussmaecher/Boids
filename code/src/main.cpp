@@ -1,8 +1,8 @@
 #include "boids2D/boids.h"
-#include "boids3D/boids3D.h"
 
 int main() {
     //init
+    SetTraceLogLevel(LOG_NONE);
     InitWindow(1200, 900, "Boids");
     SetTargetFPS(64);
 
