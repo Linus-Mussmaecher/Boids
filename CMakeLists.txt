@@ -19,8 +19,8 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(raylib)
 
 # Add source files
-file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/code/src/*")
-set(PROJECT_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/code/src/")
+file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/src/*")
+set(PROJECT_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/src/")
 
 add_executable(${PROJECT_NAME})
 target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
