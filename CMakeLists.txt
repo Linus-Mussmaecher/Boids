@@ -18,7 +18,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(raylib)
 
-add_executable(boids code/src/main.cpp code/src/boids2D/boids.h code/src/boids2D/boid.cpp code/src/ray_extend/ray_extend.h code/src/ray_extend/ray_extend.cpp code/src/boids2D/obstacle.cpp code/src/boids2D/boids.cpp)
+# Add source files
+file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/code/src/*")
+set(PROJECT_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/code/src/")
+
+add_executable(${PROJECT_NAME})
+target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
+target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE})
 
 # link raylib
 target_link_libraries(boids PRIVATE raylib)
