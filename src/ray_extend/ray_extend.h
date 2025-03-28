@@ -35,13 +35,8 @@ bool CheckCollisionLineRect(Vector2 line_start, Vector2 line_end, Rectangle rect
 //checks if the line between the two vectors collides with the rectangle
 bool CheckCollisionLineRect(Vector2 line_start, Vector2 line_end, Rectangle rect);
 
-Vector2 operator+(Vector2 a, Vector2 b);
-Vector2 operator-(Vector2 a, Vector2 b);
-Vector2 operator/(Vector2 v, float f);
-Vector2 operator*(Vector2 v, float f);
 Vector2 operator*(float f, Vector2 v);
-bool operator==(Vector2 a, Vector2 b);
-float operator*(Vector2 a, Vector2 b);
+float scalar_product(Vector2 a, Vector2 b);
 
 
 //returns a vector with length length pointing into direction v
@@ -56,13 +51,9 @@ Vector3 Vector3ScaleDown(Vector3 v, float length);
 //returns the perpendicular projection of vector a onto base vector b
 Vector3 Vector3ProjectOnto(Vector3 a, Vector3 b);
 
-Vector3 operator+(Vector3 a, Vector3 b);
-Vector3 operator-(Vector3 a, Vector3 b);
-Vector3 operator/(Vector3 v, float f);
-Vector3 operator*(Vector3 v, float f);
 Vector3 operator*(float f, Vector3 v);
 bool operator==(Vector3 a, Vector3 b);
-float operator*(Vector3 a, Vector3 b);
+float scalar_product(Vector3 a, Vector3 b);
 
 
 #endif //BOIDS_RAY_EXTEND_H

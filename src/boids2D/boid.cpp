@@ -3,6 +3,7 @@
 //
 
 #include "boids.h"
+#include "ray_extend/ray_extend.h"
 
 Boid::Boid(Vector2 pos, Vector2 dir) :
         pos(pos), dir(dir), color({
@@ -30,7 +31,7 @@ void Boid::move(vector<Boid> *boids, vector<Obstacle> *obstacles) {
             mate_dir_sum = mate_dir_sum + b.dir;
             //radial separation force
             mate_avoid_force = mate_avoid_force +
-                               ((pos == b.pos) ? -1 * dir : (pos - b.pos) / Vector2Distance(pos, b.pos)) * steer_force;
+                               ((pos == b.pos) ? -1.f * dir : (pos - b.pos) / Vector2Distance(pos, b.pos)) * steer_force;
             mate_count++;
         }
     }
@@ -87,7 +88,7 @@ void Boid::move(vector<Boid> *boids, vector<Obstacle> *obstacles) {
         //if rules are pushing into the environment, avoid that part of the force
         Vector2 projection = Vector2ProjectOnto(rule_force, avoid_force);
         //if the dot product is negative (the vectors are pointing in opposite direction, remove that part of the rule_force
-        if (projection * avoid_force < 0) {
+        if (scalar_product(projection, avoid_force) < 0) {
             rule_force = rule_force - projection;
         }
     } else {

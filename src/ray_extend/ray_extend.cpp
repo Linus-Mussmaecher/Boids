@@ -70,32 +70,12 @@ bool CheckCollisionLineRect(Vector2 line_start, Vector2 line_end, Rectangle rect
     return CheckCollisionLineRect(line_start, line_end, rect, &_);
 }
 
-Vector2 operator+(Vector2 a, Vector2 b) {
-    return {a.x + b.x, a.y + b.y};
-}
-
-Vector2 operator-(Vector2 a, Vector2 b) {
-    return {a.x - b.x, a.y - b.y};
-}
-
-Vector2 operator/(Vector2 v, float f) {
-    return {v.x / f, v.y / f};
-}
-
-Vector2 operator*(Vector2 v, float f) {
-    return {v.x * f, v.y * f};
-}
-
 Vector2 operator*(float f, Vector2 v) {
     return {f * v.x, f * v.y};
 }
 
-bool operator==(Vector2 a, Vector2 b) {
-    return a.x == b.x && a.y == b.y;
-}
-
 //dot product
-float operator*(Vector2 a, Vector2 b) {
+float scalar_product(Vector2 a, Vector2 b) {
     return Vector2DotProduct(a, b);
 }
 
@@ -118,22 +98,7 @@ Vector3 Vector3ScaleDown(Vector3 v, float length){
 
 //returns the perpendicular projection of vector a onto base vector b
 Vector3 Vector3ProjectOnto(Vector3 a, Vector3 b) {
-    return b * (b * a) / (a * a);
-}
-Vector3 operator+(Vector3 a, Vector3 b){
-    return {a.x + b.x, a.y + b.y, a.z + b.z};
-}
-
-Vector3 operator-(Vector3 a, Vector3 b){
-    return {a.x - b.x, a.y - b.y, a.z - b.z};
-}
-
-Vector3 operator/(Vector3 v, float f){
-    return {v.x / f, v.y / f, v.z / f};
-}
-
-Vector3 operator*(Vector3 v, float f){
-    return {v.x * f, v.y * f, v.z * f};
+    return b * scalar_product(b, a) / scalar_product(a, a);
 }
 Vector3 operator*(float f, Vector3 v){
     return {f * v.x, f * v.y, f * v.z};
@@ -141,6 +106,6 @@ Vector3 operator*(float f, Vector3 v){
 bool operator==(Vector3 a, Vector3 b){
     return a.x == b.x && a.y == b.y && a.z == b.z;
 }
-float operator*(Vector3 a, Vector3 b){
+float scalar_product(Vector3 a, Vector3 b){
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
